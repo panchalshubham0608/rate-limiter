@@ -5,11 +5,11 @@ import FixedWindowMemcachedRateLimiter from "../ratelimiter/FixedWindowMemcached
 import SlidingWindowMinHeapRateLimiter from "../ratelimiter/SlidingWindowMinHeapRateLimiter";
 import SlidingWindowListRateLimiter from "../ratelimiter/SlidingWindowListRateLimiter";
 import SlidingWindowRedisListRateLimiter from "../ratelimiter/SlidingWindowRedisListRateLimiter";
+import SlidingWindowRedisSortedSetsRateLimiter from "../ratelimiter/SlidingWindowRedisSortedSetsRateLimiter";
 
 // constants for testing - Allowing 4 requests per 1 second
 const threshold : number = 4;
 const timeInterval : number = 1000;
-let userId = 'test-user';
 
 // generates the list of rate limiters to test
 function getRateLimiters(threshold : number, timeInterval: number) : IRateLimiter[] {
@@ -19,6 +19,7 @@ function getRateLimiters(threshold : number, timeInterval: number) : IRateLimite
         new SlidingWindowMinHeapRateLimiter(threshold, timeInterval),
         new SlidingWindowListRateLimiter(threshold, timeInterval),
         new SlidingWindowRedisListRateLimiter(threshold, timeInterval),
+        new SlidingWindowRedisSortedSetsRateLimiter(threshold, timeInterval),
     ];
 }
 
@@ -34,6 +35,7 @@ describe('#should-be-rate-limited', () => {
     for (let i = 0; i < rateLimiters.length; i++) {
         // fetch the rate limiter
         let rateLimiter = rateLimiters[i];
+        let userId = Math.random().toString(36).substring(7);
 
         // destory the rate limiter after the test
         afterAll(() => {
@@ -79,6 +81,7 @@ describe('#test-boundary-spikes', () => {
     for (let i = 0; i < rateLimiters.length; i++) {
         // fetch the rate limiter
         let rateLimiter = rateLimiters[i];
+        let userId = Math.random().toString(36).substring(7);
 
         // destory the rate limiter after the test
         afterAll(() => {

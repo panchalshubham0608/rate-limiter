@@ -4,11 +4,10 @@ import { RedisClientType, createClient } from "redis";
 
 /**
  * SlidingWindowListRateLimiter is a class that implements IRateLimiter.
- * It uses in-memory sorted-linked list by timestamps for each user to store the request count.
+ * It uses redis list sorted by timestamps for each user to store the request count.
  * 
  * This is a sliding window rate limiter.
- * But it has a drawback of its own i.e. it's an in-memory rate limiter.
- * And therefore, it can't be used in a distributed environment.
+ * Since this uses redis to store information it can be used in a distributed environment.
  * 
  * Furthermore, let's say we have a threshold of T.
  * The time taken to check if the user is allowed to perform the action or not is O(T).
@@ -33,7 +32,7 @@ class SlidingWindowRedisListRateLimiter extends SlidingWindowRateLimiter {
 
         // connect to the redis servcer
         this.redisClient.connect().then(() => {
-            console.log('Connected to redis server.')
+            // console.log('Connected to redis server.')
         }).catch((err) => {
             console.log(err);
             console.log('Failed to connect to redis server.');
@@ -89,7 +88,7 @@ class SlidingWindowRedisListRateLimiter extends SlidingWindowRateLimiter {
      */
     destroy(): void {
         this.redisClient.disconnect().then(() => {
-            console.log(`Redis client disconnected!`);
+            // console.log(`Redis client disconnected!`);
         }).catch(err => {
             console.log(err);
             console.log(`Failed to disconnec to redis client.`);
