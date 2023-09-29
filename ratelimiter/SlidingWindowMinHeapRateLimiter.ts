@@ -236,6 +236,14 @@ class SlidingWindowMinHeapRateLimiter extends RateLimiterImpl {
     destroy(): void {
         // do nothing
     }
+
+    /**
+     * Resets the rate limiter.
+     */
+    reset(): void {
+        // clear the user map
+        this.userMap.clear();
+    }
 }
 
 // export the class

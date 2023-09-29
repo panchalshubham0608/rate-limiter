@@ -30,9 +30,16 @@ class FixedWindowInMemoryRateLimiter extends FixedWindowRateLimiter {
         this.requestCount = new Map<string, number>();
 
         // clear the request count every time interval
-        this.timeIntervalId = setInterval(() => {
+        this.setupInterval();
+    }
+
+    // flushes the request count
+    protected flush() : Promise<void> {
+        return new Promise((resolve, _) => {
+            // clear the request count
             this.requestCount.clear();
-        }, timeInterval);
+            resolve();
+        });
     }
 
     /**

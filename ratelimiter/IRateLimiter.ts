@@ -29,6 +29,11 @@ interface IRateLimiter {
      * When the RateLimiter is destroyed, it should stop clearing the request count every time interval.
      */
     destroy(): void;
+
+    /**
+     * Resets the rate-limiter.
+     */
+    reset(): void;
 }
 
 

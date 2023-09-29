@@ -40,15 +40,20 @@ class FixedWindowMemcachedRateLimiter extends FixedWindowRateLimiter {
         this.memcached = new Memcached(memcachedUrl);
 
         // clear the request count every time interval
-        this.timeIntervalId = setInterval(() => {
+        this.setupInterval();
+    }
+
+    // flushes the memcached client
+    protected flush() : Promise<void> {
+        return new Promise((resolve, reject) => {
             this.memcached.flush((err: Error) => {
                 if (err) {
-                    console.error(err);
-                    return;
+                    reject(err);
+                    return;                    
                 }
-                // console.log('Flushed memcached');
+                resolve();
             });
-        }, timeInterval);
+        });
     }
 
     /**
@@ -106,6 +111,7 @@ class FixedWindowMemcachedRateLimiter extends FixedWindowRateLimiter {
             });
         });
     }
+
 }
 
 // export the FixedWindowMemcachedRateLimiter class

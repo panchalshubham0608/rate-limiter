@@ -46,6 +46,11 @@ abstract class RateLimiterImpl implements IRateLimiter {
      * When the FixedWindowMemcachedRateLimiter is destroyed, it should stop clearing the request count every time interval.
      */
     abstract destroy() : void;
+
+    /**
+     * Resets the rate-limiter.
+     */
+    abstract reset() : void;
 }
 
 // export the class

@@ -19,6 +19,24 @@ abstract class FixedWindowRateLimiter extends RateLimiterImpl {
     }
 
     /**
+     * Flushes the rate limiter.
+     */
+    protected abstract flush() : Promise<void>;
+
+    // setup the interval to clear the request count
+    protected setupInterval() {
+        if (this.timeIntervalId) clearInterval(this.timeIntervalId);
+        // clear the request count every time interval
+        this.timeIntervalId = setInterval(() => {
+            this.flush().then(() => {
+                // console.log(`${this.constructor.name} flushed at ${Date.now()}`);
+            }).catch(err => {
+                console.log(`${this.constructor.name} flush error: ${err}`);
+            });
+        }, this.getTimeInterval());
+    }
+
+    /**
      * When the FixedWindowRateLimiter is destroyed, it should stop clearing the request count every time interval.
      */
     destroy() : void {
@@ -26,6 +44,21 @@ abstract class FixedWindowRateLimiter extends RateLimiterImpl {
         if (this.timeIntervalId) {
             clearInterval(this.timeIntervalId);
         }
+    }
+
+    /**
+     * Resets the rate-limiter.
+     */
+    reset() : void {
+        // flush the rate limiter
+        this.flush().then(() => {
+            // console.log(`${this.constructor.name} flushed at ${Date.now()}`);
+        }).catch(err => {
+            console.log(`${this.constructor.name} flush error: ${err}`);
+        }).finally(() => {
+            // setup the interval again
+            this.setupInterval();
+        });
     }
 
 }
