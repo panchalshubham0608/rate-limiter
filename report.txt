@@ -1,0 +1,21 @@
+
+> ratelimiter@1.0.0 test
+> npx tsc && jest --coverage
+
+-------------------------------------|---------|----------|---------|---------|-------------------
+File                                 | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------------------------|---------|----------|---------|---------|-------------------
+All files                            |   24.68 |    26.12 |      20 |   25.32 |                   
+ dist/ratelimiter                    |   28.57 |    34.61 |   24.32 |   28.57 |                   
+  FixedWindowInMemoryRateLimiter.js  |      50 |    54.54 |      40 |      50 | 32-57             
+  FixedWindowMemcachedRateLimiter.js |   35.71 |    47.36 |      25 |   35.71 | 42-84             
+  FixedWindowRateLimiter.js          |   77.77 |    66.66 |   66.66 |   77.77 | 27-28             
+  RateLimiterImpl.js                 |   66.66 |      100 |   33.33 |   66.66 | 23-31             
+  SlidingWindowMinHeapRateLimiter.js |   10.44 |    15.38 |   11.11 |   10.44 | 17-149,183-202    
+ ratelimiter                         |   20.35 |     6.06 |   15.15 |   21.49 |                   
+  FixedWindowInMemoryRateLimiter.ts  |   38.46 |        0 |      25 |   38.46 | 34-62             
+  FixedWindowMemcachedRateLimiter.ts |      28 |       25 |   14.28 |      28 | 44-92             
+  FixedWindowRateLimiter.ts          |   66.66 |        0 |      50 |   66.66 | 26-27             
+  RateLimiterImpl.ts                 |      60 |      100 |   33.33 |      60 | 28-37             
+  SlidingWindowMinHeapRateLimiter.ts |    6.25 |        0 |    5.88 |    6.89 | 17-166,206-229    
+-------------------------------------|---------|----------|---------|---------|-------------------

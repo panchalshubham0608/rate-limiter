@@ -10,7 +10,7 @@ interface IRateLimiter {
      * @param userId - the user id to check against
      * @return true if the user is allowed to perform the action, false otherwise
      */
-    isAllowed(userId: string): boolean;
+    isAllowed(userId: string): Promise<boolean>;
 
     /**
      * Returns the threshold for the rate limiter

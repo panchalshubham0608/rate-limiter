@@ -13,8 +13,8 @@ app.get('/:userId', rateLimiterMiddleware, (req: Request, res: Response) => {
     res.status(200).send('Hello World!');
 });
 
-// retrive the port from command line arguments or use 3000 as default
-const port : number = (process.argv[2] && parseInt(process.argv[2])) || 3000;
+// retrive the port from command line arguments or use 8080 as default
+const port : number = (process.argv[2] && parseInt(process.argv[2])) || 8080;
 
 // start the Express server
 app.listen(port, () => {

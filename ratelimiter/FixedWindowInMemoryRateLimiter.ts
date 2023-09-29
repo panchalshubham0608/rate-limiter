@@ -1,5 +1,5 @@
 // imports
-import IRateLimiter from './IRateLimiter';
+import FixedWindowRateLimiter from './FixedWindowRateLimiter';
 
 /**
  * FixedWindowInMemoryRateLimiter is a class that implements the RateLimiter interface.
@@ -12,12 +12,10 @@ import IRateLimiter from './IRateLimiter';
  * If the application is deployed on multiple servers, then the request count will not be shared across servers.
  * This means that a user can perform the action more than the threshold if the requests are distributed across servers.
  */
-class FixedWindowInMemoryRateLimiter implements IRateLimiter {
+class FixedWindowInMemoryRateLimiter extends FixedWindowRateLimiter {
 
-    private threshold: number;
-    private timeInterval: number;
+    // the request count for each user
     private requestCount: Map<string, number>;
-    private timeIntervalId: NodeJS.Timeout;
 
     /**
      * Initializes a new FixedWindowRateLimiter with the given threshold and time interval.
@@ -25,8 +23,10 @@ class FixedWindowInMemoryRateLimiter implements IRateLimiter {
      * @param timeInterval 
      */
     constructor(threshold: number, timeInterval: number) {
-        this.threshold = threshold;
-        this.timeInterval = timeInterval;
+        // invoke the super constructor
+        super(threshold, timeInterval)
+
+        // initialize the request count
         this.requestCount = new Map<string, number>();
 
         // clear the request count every time interval
@@ -36,51 +36,33 @@ class FixedWindowInMemoryRateLimiter implements IRateLimiter {
     }
 
     /**
-     * When the FixedWindowRateLimiter is destroyed, it should stop clearing the request count every time interval.
-     */
-    destroy() : void {
-        // stop clearing the request count every time interval
-        clearInterval(this.timeIntervalId);
-    }
-
-    /**
      * Checks if the user is allowed to perform the action or not.
      * If user is allowed, then the rate limiter should record the action.
      * And when the threshold is reached, the user should not be allowed to perform the action.
      * @param userId - the user id to check against
      * @return true if the user is allowed to perform the action, false otherwise
      */
-    isAllowed(userId: string): boolean {
-        // if the user has not made any requests, then allow the request
-        let requestCount = this.requestCount.get(userId) || 0;
-        // check if threshold is reached
-        if (requestCount >= this.threshold) {
-            // threshold reached, do not allow the request
-            return false;
-        }
+    isAllowed(userId: string): Promise<boolean> {
+        // create a new promise
+        return new Promise<boolean>((resolve, _) => {
+            // if the user has not made any requests, then allow the request
+            let requestCount = this.requestCount.get(userId) || 0;
+            // check if threshold is reached
+            if (requestCount >= this.threshold) {
+                // threshold reached, do not allow the request
+                resolve(false);
+                return;
+            }
 
-        // threshold not reached, allow the request
-        // increment the request count
-        this.requestCount.set(userId, requestCount + 1);
-        return true;
+            // threshold not reached, allow the request
+            // increment the request count
+            this.requestCount.set(userId, requestCount + 1);
+
+            // allow the request
+            resolve(true);
+        });
     }
 
-    /**
-     * Returns the threshold for the rate limiter
-     * i.e. the number of times a user is allowed to perform the action in a given time interval
-     * @return the threshold
-     */
-    getThreshold(): number {
-        return this.threshold;
-    }
-
-    /**
-     * Returns the time interval for the rate limiter in milliseconds
-     * @return
-     */
-    getTimeInterval(): number {
-        return this.timeInterval;
-    }
 }
 
 // export the FixedWindowInMemoryRateLimiter class
