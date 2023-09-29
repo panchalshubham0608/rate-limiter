@@ -4,6 +4,7 @@ import FixedWindowInMemoryRateLimiter from "./FixedWindowInMemoryRateLimiter";
 import FixedWindowMemcachedRateLimiter from "./FixedWindowMemcachedRateLimiter";
 import SlidingWindowMinHeapRateLimiter from "./SlidingWindowMinHeapRateLimiter";
 import SlidingWindowListRateLimiter from "./SlidingWindowListRateLimiter";
+import SlidingWindowRedisListRateLimiter from "./SlidingWindowRedisListRateLimiter";
 
 /**
  * RateLimiterFactory is a factory class that creates a new IRateLimiter.
@@ -19,7 +20,8 @@ class RateLimiterFactory {
         // return new FixedWindowInMemoryRateLimiter(threshold, timeInterval);
         // return new FixedWindowMemcachedRateLimiter(threshold, timeInterval);
         // return new SlidingWindowMinHeapRateLimiter(threshold, timeInterval);
-        return new SlidingWindowListRateLimiter(threshold, timeInterval);
+        // return new SlidingWindowListRateLimiter(threshold, timeInterval);
+        return new SlidingWindowRedisListRateLimiter(threshold, timeInterval);
     }
     /**
      * Creates a new IRateLimiter with the given threshold and time interval.

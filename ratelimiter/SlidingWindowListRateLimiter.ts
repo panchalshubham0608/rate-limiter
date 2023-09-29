@@ -1,5 +1,5 @@
 // imports
-import RateLimiterImpl from "./RateLimiterImpl";
+import SlidingWindowRateLimiter from "./SlidingWindowRateLimiter";
 
 /**
  * Represents a node in the linked list.
@@ -112,7 +112,7 @@ class LinkedList<T> {
  * Furthermore, let's say we have a threshold of T.
  * The time taken to check if the user is allowed to perform the action or not is O(T).
  */
-class SlidingWindowListRateLimiter extends RateLimiterImpl {
+class SlidingWindowListRateLimiter extends SlidingWindowRateLimiter {
     // the map of userId to min heap
     private userMap: Map<string, LinkedList<number>>;
 
@@ -162,21 +162,6 @@ class SlidingWindowListRateLimiter extends RateLimiterImpl {
             // resolve the promise with true
             resolve(true);
         });
-    }
-
-    /**
-     * Destroys the rate limiter.
-     */
-    destroy(): void {
-        // do nothing
-    }
-
-    /**
-     * Resets the rate limiter.
-     */
-    reset(): void {
-        // clear the user map
-        this.userMap.clear();
     }
 }
 

@@ -1,5 +1,5 @@
 // imports
-import RateLimiterImpl from "./RateLimiterImpl";
+import SlidingWindowRateLimiter from "./SlidingWindowRateLimiter";
 
 /**
  * Implements a min heap for any type T.
@@ -178,7 +178,7 @@ class MinHeap<T> {
  * Furthermore, let's say we have a threshold of T.
  * The time taken to check if the user is allowed to perform the action or not is O(TlogT).
  */
-class SlidingWindowMinHeapRateLimiter extends RateLimiterImpl {
+class SlidingWindowMinHeapRateLimiter extends SlidingWindowRateLimiter {
     // the map of userId to min heap
     private userMap: Map<string, MinHeap<number>>;
 
@@ -228,21 +228,6 @@ class SlidingWindowMinHeapRateLimiter extends RateLimiterImpl {
             // resolve the promise with true
             resolve(true);
         });
-    }
-
-    /**
-     * Destroys the rate limiter.
-     */
-    destroy(): void {
-        // do nothing
-    }
-
-    /**
-     * Resets the rate limiter.
-     */
-    reset(): void {
-        // clear the user map
-        this.userMap.clear();
     }
 }
 

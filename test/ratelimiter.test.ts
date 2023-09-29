@@ -4,6 +4,7 @@ import FixedWindowInMemoryRateLimiter from "../ratelimiter/FixedWindowInMemoryRa
 import FixedWindowMemcachedRateLimiter from "../ratelimiter/FixedWindowMemcachedRateLimiter";
 import SlidingWindowMinHeapRateLimiter from "../ratelimiter/SlidingWindowMinHeapRateLimiter";
 import SlidingWindowListRateLimiter from "../ratelimiter/SlidingWindowListRateLimiter";
+import SlidingWindowRedisListRateLimiter from "../ratelimiter/SlidingWindowRedisListRateLimiter";
 
 // constants for testing - Allowing 4 requests per 1 second
 const threshold : number = 4;
@@ -17,6 +18,7 @@ function getRateLimiters(threshold : number, timeInterval: number) : IRateLimite
         new FixedWindowMemcachedRateLimiter(threshold, timeInterval),
         new SlidingWindowMinHeapRateLimiter(threshold, timeInterval),
         new SlidingWindowListRateLimiter(threshold, timeInterval),
+        new SlidingWindowRedisListRateLimiter(threshold, timeInterval),
     ];
 }
 
