@@ -6,3 +6,7 @@ dist
 
 # ignore any log files
 *.log
+
+# ignore coverage report
+coverage
+

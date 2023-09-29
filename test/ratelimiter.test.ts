@@ -3,7 +3,7 @@ import IRateLimiter from "../ratelimiter/IRateLimiter";
 import FixedWindowInMemoryRateLimiter from "../ratelimiter/FixedWindowInMemoryRateLimiter";
 import FixedWindowMemcachedRateLimiter from "../ratelimiter/FixedWindowMemcachedRateLimiter";
 import SlidingWindowMinHeapRateLimiter from "../ratelimiter/SlidingWindowMinHeapRateLimiter";
-import { time } from "console";
+import SlidingWindowListRateLimiter from "../ratelimiter/SlidingWindowListRateLimiter";
 
 // constants for testing - Allowing 4 requests per 1 second
 const threshold : number = 4;
@@ -16,6 +16,7 @@ function getRateLimiters(threshold : number, timeInterval: number) : IRateLimite
         new FixedWindowInMemoryRateLimiter(threshold, timeInterval),
         new FixedWindowMemcachedRateLimiter(threshold, timeInterval),
         new SlidingWindowMinHeapRateLimiter(threshold, timeInterval),
+        new SlidingWindowListRateLimiter(threshold, timeInterval),
     ];
 }
 
@@ -64,9 +65,7 @@ describe('#should-be-rate-limited', () => {
                 });
             }
         });
-
     }
-
 });
 
 
